@@ -1,0 +1,2 @@
+export const SHIELDPASS_PACKAGE_ID = '0xb0761fc1fc88160d64b8a9ef9711aa820215e86b1552d0c03ca562faf2a192b0';
+export const SUI_CLOCK_OBJECT_ID = '0x6';

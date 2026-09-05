@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Shield, Menu, X, Settings, LogOut, ChevronDown, Wallet } from 'lucide-react';
+import { Shield, Menu, X, Settings, LogOut, ChevronDown } from 'lucide-react';
 import { ConnectButton } from '@mysten/dapp-kit-react/ui';
 import { useCurrentAccount } from '@mysten/dapp-kit-react';
 import { useAuth } from '../context/AuthContext';

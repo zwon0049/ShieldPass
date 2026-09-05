@@ -9,16 +9,25 @@ export type TransactionNotice = {
   digest?: string;
 } | null;
 
+// function friendlyError(error: unknown): string {
+//   const raw = error instanceof Error ? error.message : String(error);
+//   console.error('RAW SUI ERROR:', raw);
+//   return `Transaction failed: ${raw}`;
+// }
+
 function friendlyError(error: unknown): string {
   const raw = error instanceof Error ? error.message : String(error);
+  console.error('RAW SUI ERROR:', raw);
   const lower = raw.toLowerCase();
 
   if (lower.includes('rejected') || lower.includes('denied') || lower.includes('cancel')) {
     return 'The transaction was cancelled before signing.';
   }
+
   if (lower.includes('insufficient') || lower.includes('balance') || lower.includes('coin')) {
     return 'Not enough Testnet SUI. Fund the zkLogin address from the Sui faucet, then retry.';
   }
+
   if (lower.includes('invalid') && lower.includes('address')) {
     return 'The merchant wallet address is not valid.';
   }
@@ -56,6 +65,7 @@ export function useSuiTransaction() {
       setNotice({ type: 'success', message: successMessage, digest });
     },
     onError: error => {
+      console.error('FULL SUI TRANSACTION ERROR:', error);
       setNotice({ type: 'error', message: friendlyError(error) });
     },
   });

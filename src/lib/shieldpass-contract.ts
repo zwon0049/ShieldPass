@@ -6,7 +6,6 @@ export const SHIELDPASS_PACKAGE_ID =
 
 export const SHIELDPASS_MODULE = 'pass';
 export const CLOCK_ID = '0x6';
-const SUI_COIN_TYPE = '0x2::sui::SUI';
 const MIST_PER_SUI = 1_000_000_000n;
 
 export function suiToMist(value: string): bigint {
@@ -35,11 +34,15 @@ export function buildCreatePassTx({
   const durationMs = BigInt(durationDays) * 24n * 60n * 60n * 1_000n;
 
   // This selects SUI owned by the signed-in user, not Enoki's sponsored gas coin.
-  const depositCoin = tx.coin({
-    type: SUI_COIN_TYPE,
-    balance: depositMist,
-    useGasCoin: false,
-  });
+  // const depositCoin = tx.coin({
+  //   type: SUI_COIN_TYPE,
+  //   balance: depositMist,
+  //   useGasCoin: false,
+  // });
+
+  // Split the user's gas coin so part becomes the ShieldPass deposit
+  // and the remaining SUI can still pay transaction gas.
+  const [depositCoin] = tx.splitCoins(tx.gas, [depositMist]);
 
   tx.moveCall({
     target: `${SHIELDPASS_PACKAGE_ID}::${SHIELDPASS_MODULE}::create_pass`,
